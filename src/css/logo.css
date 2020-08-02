@@ -8,15 +8,15 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    .App-logo.Animation {
+    .app-logo.animation {
         animation: App-logo-spin infinite 3s alternate;
     }
 }
 
-.App-logo.Animation {
+.app-logo.animation {
     height: 100px;
 }
 
-.App-logo.Animation {
+.app-logo.animation {
     padding: 20px;
 }

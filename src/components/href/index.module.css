@@ -1,0 +1,19 @@
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.list-item {
+    display: inline-block;
+    height: auto;
+    cursor: pointer;
+    vertical-align: top;
+    padding: 2px 50px;
+}
+
+.list-item:hover {
+    color:red;
+    padding: 0 48px;
+    border: 2px solid black;
+    border-radius: 15px;
+}

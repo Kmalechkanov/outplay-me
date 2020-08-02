@@ -3,6 +3,8 @@ import styles from './index.module.css'
 import getNavigation from '../../utils/navigation'
 import UserContext from '../../Context'
 import logo from '../../svgs/logo.svg'
+import Line from '../line'
+import Href from '../href'
 
 class Header extends Component {
     static contextType = UserContext
@@ -15,21 +17,20 @@ class Header extends Component {
         const links = getNavigation(user)
 
         return (
-            <header className={styles['App-header']}>
-                {console.log('styles', styles)}
-                <img src={logo} className='App-logo Animation' alt="logo" />
-                <nav className={styles['Flex-nav']}>
-                    {
-                        links.map(navEl => {
-                            return (
-                                <li key={navEl.title}>
-                                    <a>{navEl.title}</a>
-                                    <a>{navEl.link}</a>
-                                </li>
-                            )
-                        })
-                    }
-                </nav>
+            <header>
+                <div className={styles['app-header']}>
+                    <img src={logo} className='app-logo animation' alt='logo' />
+                    <nav className={styles['flex-nav']}>
+                        {
+                            links.map(navEl => {
+                                return (
+                                    <Href key={navEl.title} title={navEl.title} link={navEl.link}/>
+                                )
+                            })
+                        }
+                    </nav>
+                </div>
+                <Line/>
             </header>
         )
     }

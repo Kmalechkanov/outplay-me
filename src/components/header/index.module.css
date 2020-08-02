@@ -1,4 +1,4 @@
-.App-header {
+.app-header {
   background-color: #134074;
   min-height: 100px;
   display: flex;
@@ -8,7 +8,7 @@
   color: white;
 }
 
-.Flex-nav {
+.flex-nav {
   padding: 0 20px;
   display: flex;
 }

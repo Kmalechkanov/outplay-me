@@ -1,0 +1,14 @@
+.App-header {
+  background-color: #134074;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: white;
+}
+
+.Flex-nav {
+  padding: 0 20px;
+  display: flex;
+}

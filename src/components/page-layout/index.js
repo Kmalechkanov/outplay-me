@@ -1,12 +1,11 @@
 import React from 'react'
 import styles from './index.module.css'
+import Header from '../header'
 
 const PageLayout = (props) => {
     return (
         <div>
-            <header>
-                <h1>Header</h1>
-            </header>
+            <Header>Test</Header>
 
             <div>
                 {props.children}

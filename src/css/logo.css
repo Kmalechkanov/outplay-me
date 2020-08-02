@@ -1,0 +1,22 @@
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(-10deg);
+    }
+    to {
+        transform: rotate(10deg);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo.Animation {
+        animation: App-logo-spin infinite 3s alternate;
+    }
+}
+
+.App-logo.Animation {
+    height: 100px;
+}
+
+.App-logo.Animation {
+    padding: 20px;
+}

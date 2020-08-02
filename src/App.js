@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import UserContext from './context'
+import UserContext from './Context'
 import getCookie from './utils/cookie'
-import logo from './logo.svg'
-import './App.css'
+import logo from './svgs/logo.svg'
+import './css/logo.css'
 
-import * as Constants from './constants'
+import * as Constants from './Constants'
 
 const App = (props) => {
   const [user, setUser] = useState(null)

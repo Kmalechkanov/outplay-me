@@ -12,7 +12,9 @@
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1"
   },
-  "scripts": {
+  "scripts": {	
+	"all": "start npm run start && start npm run db",
+	"db": "cd ../rest-auth && node server",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

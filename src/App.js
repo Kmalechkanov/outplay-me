@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import UserContext from './Context'
 import getCookie from './utils/cookie'
+import { UserAPIUrl } from 'constants'
 import logo from './svgs/logo.svg'
 import './css/logo.css'
 
@@ -32,6 +33,7 @@ const App = (props) => {
       return
     }
 
+    // TODO change this
     fetch('http://localhost:9999/api/user/verify', {
       method: 'GET',
       headers: {

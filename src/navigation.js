@@ -7,7 +7,7 @@ import {
 
 import HomePage from './pages/home'
 import ErrorPage from './pages/error'
-//import RegisterPage from './pages/register'
+import Register from './pages/register'
 //import LoginPage from './pages/login'
 
 const Navigation = () => {
@@ -16,7 +16,7 @@ const Navigation = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={HomePage} />
-          {/* <Route path="/register" component={RegisterPage} /> */}
+          <Route path="/register" component={Register} />
           {/* <Route path="/login" component={LoginPage} /> */}
           {/* <Route path="/share" component={} /> */}
           {/* <Route path="/profile/:userid" component={ProfilePage} /> */}

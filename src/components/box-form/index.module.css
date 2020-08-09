@@ -1,0 +1,20 @@
+.box {
+    border: 2px solid #0B2545;
+    background-color: white;
+    width: 800px;
+    margin: auto;
+    padding: 50px;
+    text-align: center;
+}
+
+.box label {
+    padding-bottom: 10px;
+}
+
+.box button {
+    margin: auto;
+}
+
+.box:focus-within {
+    border-bottom-right-radius: 50px;
+}

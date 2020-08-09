@@ -1,0 +1,20 @@
+.button {
+    background: #134074; 
+    color: #8DA9C4; 
+    padding: 10px;
+    width: 100px;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
+    border: none;
+    border: 2px solid #8DA9C4; 
+    margin: 10px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #8DA9C4;
+    border: 2px solid #134074;
+    color: #134074;
+    font-style: italic;
+}

@@ -1,5 +1,8 @@
 import React from 'react'
 import Input from '../../components/input'
+import Title from '../../components/title'
+import Button from '../../components/button'
+import BoxForm from '../../components/box-form'
 import PageLayout from '../../components/page-layout'
 import UserContext from '../../Context'
 import authenticate from '../../utils/authenticate'
@@ -46,7 +49,7 @@ class Register extends React.Component {
         }, (e) => {
             this.state.error = e.message.message
             console.log('Error', e)
-            this.render()
+            this.forceUpdate()
         })
     }
 
@@ -61,40 +64,41 @@ class Register extends React.Component {
 
         return (
             <PageLayout>
-                <form onSubmit={this.handleSubmit}>
-                    {/* <Title title="Register" /> */}
-                    <p>{
-                        this.state.error
-                    }</p>
-                    <Input
-                        value={username}
-                        onChange={(e) => this.onChange(e, 'username')}
-                        label="Username"
-                        id="username"
-                    />
-                    <Input
-                        value={email}
-                        onChange={(e) => this.onChange(e, 'email')}
-                        label="Email"
-                        id="email"
-                    />
-                    <Input
-                        type="password"
-                        value={password}
-                        onChange={(e) => this.onChange(e, 'password')}
-                        label="Password"
-                        id="password"
-                    />
-                    <Input
-                        type="password"
-                        value={rePassword}
-                        onChange={(e) => this.onChange(e, 'rePassword')}
-                        label="Re-Password"
-                        id="re-password"
-                    />
-                    <button>Register</button>
-                    {/* <Button type="submit" onClick={this.handleSubmit}>Register</Button> */}
-                </form>
+                <BoxForm body={
+                    <form onSubmit={this.handleSubmit}>
+                        <Title title="Register" />
+                        <p>{
+                            this.state.error
+                        }</p>
+                        <Input
+                            value={username}
+                            onChange={(e) => this.onChange(e, 'username')}
+                            label="Username"
+                            id="username"
+                        />
+                        <Input
+                            value={email}
+                            onChange={(e) => this.onChange(e, 'email')}
+                            label="Email"
+                            id="email"
+                        />
+                        <Input
+                            type="password"
+                            value={password}
+                            onChange={(e) => this.onChange(e, 'password')}
+                            label="Password"
+                            id="password"
+                        />
+                        <Input
+                            type="password"
+                            value={rePassword}
+                            onChange={(e) => this.onChange(e, 'rePassword')}
+                            label="Re-Password"
+                            id="re-password"
+                        />
+                        <Button text="Register"></Button>
+                    </form>
+                } />
             </PageLayout >
         )
     }

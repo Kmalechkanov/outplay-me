@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import getNavigation from '../../utils/navigation'
 import UserContext from '../../Context'
@@ -6,7 +6,7 @@ import logo from '../../svgs/logo.svg'
 import Line from '../line'
 import Href from '../href'
 
-class Header extends Component {
+class Header extends React.Component {
     static contextType = UserContext
 
     render() {

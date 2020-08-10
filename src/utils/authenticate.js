@@ -16,7 +16,8 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
       document.cookie = `x-auth-token=${authToken}`
     }
 
-    if (response.username && authToken) {
+    if (response.username && authToken 
+      || response.message == 'User was registered successfully!') {
       onSuccess({
         username: response.username,
         email: response.email,

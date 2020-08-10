@@ -45,10 +45,15 @@ class Register extends React.Component {
             password
         }, (user) => {
             this.context.logIn(user)
-            this.props.history.push('/')
+            this.props.history.push('/login')
         }, (e) => {
-            this.state.error = e.message.message
-            console.log('Error', e)
+            if (e.message.message != undefined) {
+                this.state.error = e.message.message
+            }
+            else {
+                this.state.error = e.message
+            }
+
             this.forceUpdate()
         })
     }
@@ -75,12 +80,14 @@ class Register extends React.Component {
                             onChange={(e) => this.onChange(e, 'username')}
                             label="Username"
                             id="username"
+                            required
                         />
                         <Input
                             value={email}
                             onChange={(e) => this.onChange(e, 'email')}
                             label="Email"
                             id="email"
+                            required
                         />
                         <Input
                             type="password"
@@ -88,6 +95,7 @@ class Register extends React.Component {
                             onChange={(e) => this.onChange(e, 'password')}
                             label="Password"
                             id="password"
+                            required
                         />
                         <Input
                             type="password"
@@ -95,6 +103,7 @@ class Register extends React.Component {
                             onChange={(e) => this.onChange(e, 'rePassword')}
                             label="Re-Password"
                             id="re-password"
+                            required
                         />
                         <Button text="Register"></Button>
                     </form>

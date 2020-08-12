@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import UserContext from './Context'
 import getCookie from './utils/cookie'
 import { UserAPIUrl } from 'constants'
@@ -27,26 +27,28 @@ const App = (props) => {
 
   useEffect(() => {
     const token = getCookie(Constants.TokenName)
-    if(!token) {
+    if (!token) {
       logOut()
       setLoading(false)
       return
     }
 
     // TODO change this
-    fetch('http://localhost:9999/api/user/verify', {
+    fetch(Constants.UserAPIUrl + 'verify', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': token
+        'x-access-token': token
       }
-    }).then(promise => {
-      return promise.json()
-    }).then(response => {
-      if(response.status) {
+    }).then(async res => {
+      console.log(res.status)
+      let response = await res.json()
+      console.log(response)
+      if (res.status == 200) {
         logIn({
-          username: response.user.username,
-          id: response.user._id
+          username: response.username,
+          email: response.email,
+          id: response.id
         })
       } else {
         logOut()

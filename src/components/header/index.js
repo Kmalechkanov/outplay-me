@@ -5,6 +5,8 @@ import UserContext from '../../Context'
 import logo from '../../svgs/logo.svg'
 import Line from '../line'
 import Href from '../href'
+import Button from '../button'
+import Logout from '../logout'
 
 class Header extends React.Component {
     static contextType = UserContext
@@ -14,7 +16,7 @@ class Header extends React.Component {
             user
         } = this.context
 
-        const links = getNavigation(user)
+        const navigations = getNavigation(user)
 
         return (
             <header>
@@ -22,15 +24,25 @@ class Header extends React.Component {
                     <img src={logo} className='app-logo animation' alt='logo' />
                     <nav className={styles['flex-nav']}>
                         {
-                            links.map(navEl => {
+                            navigations.map(navEl => {
+                                if (navEl.custom) {
+                                    if (navEl.title == 'LogOut') {
+                                        console.log('imgood', navEl)
+                                        return (
+                                            <Logout link='/' key={navEl.title} />
+                                        )
+                                    }
+
+                                }
+
                                 return (
-                                    <Href key={navEl.title} title={navEl.title} link={navEl.link}/>
+                                    <Href key={navEl.title} title={navEl.title} link={navEl.link} />
                                 )
                             })
                         }
                     </nav>
                 </div>
-                <Line/>
+                <Line />
             </header>
         )
     }

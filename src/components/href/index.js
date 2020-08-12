@@ -4,10 +4,10 @@ import {
   Link
 } from 'react-router-dom'
 
-const Href = ({ title, link }) => {
+const Href = ({ title, link, event }) => {
   return (
     <div className={styles['list-item']}>
-      <Link to={link} className={styles.link}>
+      <Link to={link} className={styles.link} onClick={event}>
         {title}
       </Link>
     </div>

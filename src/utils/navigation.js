@@ -8,8 +8,13 @@ const navigation = (user) => {
             title: "Profile",
             link: "/profile"
         },
+        {
+            title: "LogOut",
+            link: "/logout",
+            custom: true
+        },
     ]
-    
+
     const notAuthorized = [
         {
             title: "Home",
@@ -18,7 +23,8 @@ const navigation = (user) => {
         {
             title: "LogIn",
             link: "/login"
-        },{
+        }, 
+        {
             title: "Register",
             link: "/register"
         },
@@ -26,5 +32,6 @@ const navigation = (user) => {
 
     return user && user.loggedIn ? authorized : notAuthorized
 }
+
 
 export default navigation

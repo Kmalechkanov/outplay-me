@@ -1,6 +1,6 @@
 const players = []
 
-const addInQueue = ({player}) => {
+const addInQueue = (player) => {
     const isPlayerAlreadyIn = players.includes(player)
 
     if (isPlayerAlreadyIn) {
@@ -13,7 +13,7 @@ const addInQueue = ({player}) => {
     return { message: 'Succesfully joined in queue.' }
 }
 
-const removeFromQueue = ({player}) => {
+const removeFromQueue = (player) => {
     const index = players.find((pl) => pl === player)
 
     if (index !== -1) {

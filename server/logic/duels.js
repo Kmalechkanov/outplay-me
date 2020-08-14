@@ -1,5 +1,3 @@
-const { move } = require("../router")
-
 const players = []
 
 const addDuel = ({ id, firstPlayer, secondPlayer }) => {
@@ -33,7 +31,7 @@ const addDuel = ({ id, firstPlayer, secondPlayer }) => {
 }
 
 const removePlayer = (id) => {
-    const index = players.infexOf((player) => player.id === id)
+    const index = players.findIndex((player) => player.id === id)
 
     if (index !== -1) {
         return duels.splice(index, 1)[0]
@@ -50,13 +48,13 @@ const removeDuel = (id) => {
 }
 
 const getUser = (id) => {
-    const user = players.indexOf((player) => player.id === id)
+    const index = players.findIndex((player) => player.id === id)
 
-    if (user === -1) {
+    if (index === -1) {
         return null
     }
 
-    return user
+    return players[index]
 }
 
 const getDuel = (id) => {
@@ -65,21 +63,22 @@ const getDuel = (id) => {
     return players
 }
 
-const movePlayer = (id, way) => {
-    const playerIndex = players.infexOf((player) => player.id === id)
+const movePlayer = (id, keyState, speed) => {
+    const playerIndex = players.findIndex((player) => player.id === id)
 
-    if (player == null) {
+    if (playerIndex === -1) {
         return { success: false }
     }
 
-    move = way == 'left' ? -1 : +1
+    const move = keyState.a ? -1*speed : +1*speed
+
     const newY = players[playerIndex].y += move
 
-    if (newY < 0 || newY > 500) {
+    if (newY < 50 || newY > 450) {
         return { success: false }
     }
 
-    players[playerIndex].y += move
+    players[playerIndex].y = newY
     return {
         success: true,
         player: players[playerIndex]

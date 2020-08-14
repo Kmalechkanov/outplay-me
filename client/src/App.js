@@ -41,9 +41,8 @@ const App = (props) => {
         'x-access-token': token
       }
     }).then(async res => {
-      console.log(res.status)
       let response = await res.json()
-      console.log(response)
+      
       if (res.status == 200) {
         logIn({
           username: response.username,

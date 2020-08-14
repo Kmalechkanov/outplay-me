@@ -27,7 +27,6 @@ class Header extends React.Component {
                             navigations.map(navEl => {
                                 if (navEl.custom) {
                                     if (navEl.title == 'LogOut') {
-                                        console.log('imgood', navEl)
                                         return (
                                             <Logout link='/' key={navEl.title} />
                                         )

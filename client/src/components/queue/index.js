@@ -19,7 +19,7 @@ const Queue = () => {
     const ENDPOINT = ServerUrl
 
     useEffect(() => {
-        socket = io(ENDPOINT, { autoConnect: false })
+        socket = io(ENDPOINT)
 
         socket.on('joinQueue', ({ success }) => {
             if (success) {
@@ -28,7 +28,6 @@ const Queue = () => {
         })
 
         socket.on('leaveQueue', ({ success }) => {
-            console.log('been here')
             if (success) {
                 setTrigger(false)
                 setTimer(0)
@@ -37,8 +36,8 @@ const Queue = () => {
 
         socket.on('joinDuelMe', ({ duelId }) => {
             console.log('Duel:', duelId)
-            socket.disconnect()
 
+            socket.disconnect()
             history.push(`/duel/${duelId}`)
         })
 
@@ -55,8 +54,6 @@ const Queue = () => {
 
     useEffect(() => {
         if (!trigger) {
-            leaveQueue()
-            socket.disconnect()
             return
         }
 
@@ -71,9 +68,6 @@ const Queue = () => {
 
     const joinQueueEvent = (event) => {
         event.preventDefault()
-        socket.connect()
-
-
         socket.emit('joinQueue', { player: user.id }, (error) => {
             if (error) {
                 console.log(error)
@@ -91,8 +85,6 @@ const Queue = () => {
 
     const leaveQueueEvent = (event) => {
         event.preventDefault()
-        
-        leaveQueue()
     }
 
     return (

@@ -25,37 +25,50 @@ io.on('connect', (socket) => {
     console.log('Player connected')
 
     setInterval(function () {
-        socket.emit('queue', 'qksam');
+        socket.to('duel').emit('hidden', 'qksam');
     }, 1000);
 
-    socket.on('move', (duelId, playerId, way, callback) => {
+    socket.on('move', ({ duelId, player, keyState }, callback) => {
         socket.join(duelId)
-        const { success, player } = movePlayer(playerId, way)
+        const response = movePlayer(player, keyState, 10)
 
-        if (success) {
-            socket.to('queue').emit('move', player)
+        if (!response.success) {
+            return
         }
+
+        socket.emit('moveMe', { y: response.player.y })
+        socket.to(duelId).emit('move', {
+            y: response.player.y
+        })
     })
 
-    socket.on('joinQueue', (player, callback) => {
+    socket.on('joinQueue', ({ player }, callback) => {
+        socket.join('queue')
+
+        const user = getUser(player)
+
+        if (user !== null) {
+            socket.emit('joinDuelMe', { duelId: user.duelId })
+            return
+        }
+
         const addInQueueResponse = addInQueue(player)
 
         if (addInQueueResponse.error) {
             return callback(addInQueueResponse.error)
         }
 
-        socket.join('queue')
         socket.emit('joinQueue', { success: true })
 
         const getPlayersResponse = getTwoPlayers()
-        
+
         if (getPlayersResponse.error) {
             return callback(getPlayersResponse.error)
         }
 
         const firstPlayer = getPlayersResponse.players[0]
         const secondPlayer = getPlayersResponse.players[1]
-        
+
         const response = addDuel({
             id: uuidv4(),
             firstPlayer: firstPlayer.id == player ? firstPlayer : secondPlayer,

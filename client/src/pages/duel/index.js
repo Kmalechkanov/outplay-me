@@ -12,8 +12,8 @@ let socket
 
 const Duel = () => {
     const canvasRef = useRef()
-    const [firstPlayer, setFirstPlayer] = useState(null)
-    const [secondPlayer, setSecondPlayer] = useState(null)
+    const [firstPlayer, setFirstPlayer] = useState(250)
+    const [secondPlayer, setSecondPlayer] = useState(250)
 
     const keyState = {}
 
@@ -27,22 +27,26 @@ const Duel = () => {
     useEffect(() => {
         socket = io(ENDPOINT)
 
-        socket.on('move', (player) => {
-            console.log(player)
+        socket.on('moveMe', ({ y }) => {
+            setFirstPlayer(y)
+        })
+
+        socket.on('move', ({ y }) => {
+            setSecondPlayer(y)
         })
     }, [])
 
-    useInterval(() => gameLoop(), 100)
+    useInterval(() => gameLoop(), 16)
 
     const keyDownEvent = (e) => {
         if (e.key == 'a' || e.key == 'd') {
-            keyState[e.key] = true;
+            keyState[e.key] = true
         }
     }
 
     const keyUpEvent = (e) => {
         if (e.key == 'a' || e.key == 'd') {
-            keyState[e.key] = false;
+            keyState[e.key] = false
         }
     }
 
@@ -52,11 +56,21 @@ const Duel = () => {
                 console.log('Error', error)
             })
         }
+
     }
 
+    useEffect(() => {
+        const context = canvasRef.current.getContext('2d')
+        context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        context.fillStyle = '#0B2545'
+        context.fillRect(firstPlayer - 50, 940, 100, 20)
+        context.fillRect(secondPlayer - 50, 40, 100, 20)
+        context.fillStyle = '#134074';
+    }, [firstPlayer, secondPlayer]);
+    
     return (
         <PageLayout>
-            <div onKeyDown={keyDownEvent} onKeyUp={keyUpEvent}>
+            <div onKeyDown={keyDownEvent} onKeyUp={keyUpEvent} tabIndex="0">
                 <canvas
                     style={{ border: "1px solid black" }}
                     ref={canvasRef}

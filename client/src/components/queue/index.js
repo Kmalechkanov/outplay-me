@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useContext } from 'react'
-import queryString from 'query-string'
+import { useHistory } from 'react-router-dom'
 import io from 'socket.io-client'
 
 import { ServerUrl } from '../../Constants'
@@ -12,13 +12,14 @@ const Queue = () => {
     const [timer, setTimer] = useState(0)
     const [trigger, setTrigger] = useState(false)
 
+    let history = useHistory()
     const userContext = useContext(UserContext)
     const user = userContext.user
 
     const ENDPOINT = ServerUrl
 
     useEffect(() => {
-        socket = io(ENDPOINT)
+        socket = io(ENDPOINT, { autoConnect: false })
 
         socket.on('joinQueue', ({ success }) => {
             if (success) {
@@ -34,10 +35,28 @@ const Queue = () => {
             }
         })
 
+        socket.on('joinDuelMe', ({ duelId }) => {
+            console.log('Duel:', duelId)
+            socket.disconnect()
+
+            history.push(`/duel/${duelId}`)
+        })
+
+        socket.on('joinDuel', ({ duelId, player }) => {
+            console.log('Player:', player)
+            console.log('Duel:', duelId)
+
+            if (player == user.id) {
+                socket.disconnect()
+                history.push(`/duel/${duelId}`)
+            }
+        })
     }, [])
 
     useEffect(() => {
         if (!trigger) {
+            leaveQueue()
+            socket.disconnect()
             return
         }
 
@@ -50,10 +69,11 @@ const Queue = () => {
         }
     }, [timer, trigger])
 
-    const joinQueue = (event) => {
+    const joinQueueEvent = (event) => {
         event.preventDefault()
+        socket.connect()
 
-        
+
         socket.emit('joinQueue', { player: user.id }, (error) => {
             if (error) {
                 console.log(error)
@@ -61,9 +81,7 @@ const Queue = () => {
         })
     }
 
-    const leaveQueue = (event) => {
-        event.preventDefault()
-
+    const leaveQueue = () => {
         socket.emit('leaveQueue', { player: user.id }, (error) => {
             if (error) {
                 console.log(error)
@@ -71,12 +89,18 @@ const Queue = () => {
         })
     }
 
+    const leaveQueueEvent = (event) => {
+        event.preventDefault()
+        
+        leaveQueue()
+    }
+
     return (
         <div>
             <div>{timer}</div>
             {trigger
-                ? <Button text='Stop Queue' onClick={leaveQueue} />
-                : <Button text='Join Queue' onClick={joinQueue} />
+                ? <Button text='Stop Queue' onClick={leaveQueueEvent} />
+                : <Button text='Join Queue' onClick={joinQueueEvent} />
             }
         </div>
     )

@@ -8,10 +8,11 @@ const config = require('config')
 
 const PORT = config.get('Port')
 
-const { addDuel, removeDuel, getDuel, getUser } = require('./logic/duels')
+const { addDuel, removeDuel, getDuel, getUser, movePlayer } = require('./logic/duels')
 const { addInQueue, removeFromQueue, getTwoPlayers } = require('./logic/queue')
 
 const router = require('./router')
+const { move } = require('./router')
 
 const app = express()
 const server = http.createServer(app)
@@ -21,9 +22,20 @@ app.use(cors())
 app.use(router)
 
 io.on('connect', (socket) => {
+    console.log('Player connected')
+
     setInterval(function () {
         socket.emit('queue', 'qksam');
     }, 1000);
+
+    socket.on('move', (duelId, playerId, way, callback) => {
+        socket.join(duelId)
+        const { success, player } = movePlayer(playerId, way)
+
+        if (success) {
+            socket.to('queue').emit('move', player)
+        }
+    })
 
     socket.on('joinQueue', (player, callback) => {
         const addInQueueResponse = addInQueue(player)
@@ -36,24 +48,33 @@ io.on('connect', (socket) => {
         socket.emit('joinQueue', { success: true })
 
         const getPlayersResponse = getTwoPlayers()
-
+        
         if (getPlayersResponse.error) {
             return callback(getPlayersResponse.error)
         }
 
+        const firstPlayer = getPlayersResponse.players[0]
+        const secondPlayer = getPlayersResponse.players[1]
+        
         const response = addDuel({
             id: uuidv4(),
-            firstPlayer: getPlayersResponse.players[0],
-            secondPlayer: getPlayersResponse.players[1]
+            firstPlayer: firstPlayer.id == player ? firstPlayer : secondPlayer,
+            secondPlayer: firstPlayer.id == player ? secondPlayer : firstPlayer
         })
 
         if (response.error) {
             return callback(response.error)
         }
+
+        socket.emit('joinDuelMe', { duelId: response.player.duelId })
+        socket.to('queue').emit('joinDuel', {
+            duelId: response.player.duelId,
+            player: response.player.id
+        })
     })
 
-    socket.on('disconnect', ()=> {
-        console.log('asd')
+    socket.on('disconnect', () => {
+        console.log('Player disconnected')
     })
 
     socket.on('leaveQueue', (player, callback) => {
@@ -63,14 +84,9 @@ io.on('connect', (socket) => {
             return callback(removeResponse.error)
         }
 
-        //socket.join('queue')
         socket.emit('leaveQueue', { success: true })
-        //socket.disconnect('queue')
-        //socket.join(response.duel)
     })
 })
-
-
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`)

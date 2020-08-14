@@ -9,6 +9,7 @@ import HomePage from './pages/home'
 import ErrorPage from './pages/error'
 import RegisterPage from './pages/register'
 import LoginPage from './pages/login'
+import DuelPage from './pages/duel'
 
 const Navigation = () => {
 
@@ -18,6 +19,7 @@ const Navigation = () => {
         <Route path="/" exact component={HomePage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
+        <Route path="/duel/:id" component={DuelPage} />
         {/* <Route path="/profile/:userid" component={ProfilePage} /> */}
         <Route component={ErrorPage} />
       </Switch>

@@ -1,51 +1,95 @@
-const duels = []
+const { move } = require("../router")
+
+const players = []
 
 const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     if (!firstPlayer || !secondPlayer || !id) {
-        return { error: 'Players and room are required.' }
+        return { error: 'Players and duel are required.' }
     }
-    
-    const userAlreadyInDuel = duels.find((duel) => duel.firstPlayer === firstPlayer ||   duel.secondPlayer === secondPlayer)
-    
+
+    const userAlreadyInDuel = players.find((player) => player.id === firstPlayer || player.id === secondPlayer)
+
     if (userAlreadyInDuel) {
         return { error: 'One of the players is already in game!' }
     }
-    
-    const duel = {
-        id,
-        firstPlayer,
-        secondPlayer
-    }
-    
-    duels.push(duel)
-    console.log(duels)
 
-    return { duel }
+    let player = {
+        id: firstPlayer,
+        duelId: id,
+        y: 250
+    }
+    players.push(player)
+
+    player = {
+        id: secondPlayer,
+        duelId: id,
+        y: 250
+    }
+    players.push(player)
+
+    console.log(players)
+
+    return { player }
 }
 
-const removeDuel = (id) => {
-    const index = duels.find((duel) => duel.id === id)
+const removePlayer = (id) => {
+    const index = players.infexOf((player) => player.id === id)
 
     if (index !== -1) {
         return duels.splice(index, 1)[0]
     }
 }
 
-const getUser = (player) => {
-    const user = duels.find((duel) => duel.firstPlayer === player)
+const removeDuel = (id) => {
+    const players = players.map((player) => player.duelId === id)
+
+    if (player.lenght === 2) {
+        removePlayer(players[0].id)
+        removePlayer(players[1].id)
+    }
+}
+
+const getUser = (id) => {
+    const user = players.indexOf((player) => player.id === id)
 
     if (user === -1) {
-        user = duels.find((duel) => duel.secondPlayer === player)
+        return null
     }
 
     return user
 }
 
-const getDuel = (id) => duels.find((duel) => duel.id == id)
+const getDuel = (id) => {
+    const players = players.map((player) => player.duelId === id)
+
+    return players
+}
+
+const movePlayer = (id, way) => {
+    const playerIndex = players.infexOf((player) => player.id === id)
+
+    if (player == null) {
+        return { success: false }
+    }
+
+    move = way == 'left' ? -1 : +1
+    const newY = players[playerIndex].y += move
+
+    if (newY < 0 || newY > 500) {
+        return { success: false }
+    }
+
+    players[playerIndex].y += move
+    return {
+        success: true,
+        player: players[playerIndex]
+    }
+}
 
 module.exports = {
     addDuel,
     removeDuel,
     getUser,
-    getDuel
+    getDuel,
+    movePlayer
 }

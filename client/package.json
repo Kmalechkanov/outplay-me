@@ -15,9 +15,10 @@
     "styled-components": "^5.1.1"
   },
   "scripts": {
-    "all": "start npm run start && start npm run db",
-    "db": "cd ../rest-auth && node server",
-    "start": "react-scripts start",
+    "all": "start npm run server && start npm run db && start npm run client ",
+    "db": "cd ../../rest-auth && node server",
+	"server": "cd ../server && node index",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

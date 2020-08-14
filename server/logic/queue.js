@@ -1,9 +1,9 @@
 const players = []
 
-const addInQueue = (player) => {
-    const playerAlreadyInQueue = players.includes(player)
-    
-    if (playerAlreadyInQueue) {
+const addInQueue = ({player}) => {
+    const isPlayerAlreadyIn = players.includes(player)
+
+    if (isPlayerAlreadyIn) {
         return { error: `${player} already in queue.` }
     }
     
@@ -13,12 +13,15 @@ const addInQueue = (player) => {
     return { message: 'Succesfully joined in queue.' }
 }
 
-const removeFromQueue = (player) => {
-    const index = players.find(player)
+const removeFromQueue = ({player}) => {
+    const index = players.find((pl) => pl === player)
 
     if (index !== -1) {
-        return players.splice(index, 1)[0]
+        players.splice(index, 1)[0]
+        return { message: `Succesfully removed ${player} from queue.` }
     }
+
+    return { error: `Player ${player} was not in queue.` }
 }
 
 const getTwoPlayers = () => {

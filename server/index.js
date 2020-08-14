@@ -50,7 +50,21 @@ io.on('connect', (socket) => {
         if (response.error) {
             return callback(response.error)
         }
+    })
 
+    socket.on('disconnect', ()=> {
+        console.log('asd')
+    })
+
+    socket.on('leaveQueue', (player, callback) => {
+        const removeResponse = removeFromQueue(player)
+
+        if (removeResponse.error) {
+            return callback(removeResponse.error)
+        }
+
+        //socket.join('queue')
+        socket.emit('leaveQueue', { success: true })
         //socket.disconnect('queue')
         //socket.join(response.duel)
     })

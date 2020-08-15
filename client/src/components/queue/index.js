@@ -38,7 +38,7 @@ const Queue = () => {
             console.log('Duel:', duelId)
 
             socket.disconnect()
-            history.push(`/duel/${duelId}`)
+            history.push(`/duel/${duelId}/up`)
         })
 
         socket.on('joinDuel', ({ duelId, player }) => {
@@ -47,7 +47,7 @@ const Queue = () => {
 
             if (player == user.id) {
                 socket.disconnect()
-                history.push(`/duel/${duelId}`)
+                history.push(`/duel/${duelId}/down`)
             }
         })
     }, [])

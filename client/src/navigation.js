@@ -16,10 +16,10 @@ const Navigation = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={HomePage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/register" component={RegisterPage} />
-        <Route path="/duel/:id" component={DuelPage} />
+        <Route path='/' exact component={HomePage} />
+        <Route path='/login' component={LoginPage} />
+        <Route path='/register' component={RegisterPage} />
+        <Route path='/duel/:id/:side' component={DuelPage} />
         {/* <Route path="/profile/:userid" component={ProfilePage} /> */}
         <Route component={ErrorPage} />
       </Switch>

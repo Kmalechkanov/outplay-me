@@ -9,7 +9,6 @@ const addInQueue = (player) => {
     
     players.push(player)
     
-    console.log(players)
     return { message: 'Succesfully joined in queue.' }
 }
 
@@ -21,7 +20,7 @@ const removeFromQueue = (player) => {
         return { message: `Succesfully removed ${player} from queue.` }
     }
 
-    return { error: `Player ${player} was not in queue.` }
+    return { error: `Player ${placyer} was not in queue.` }
 }
 
 const getTwoPlayers = () => {

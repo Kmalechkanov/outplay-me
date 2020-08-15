@@ -1,4 +1,5 @@
 const players = []
+const balls = []
 
 const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     if (!firstPlayer || !secondPlayer || !id) {
@@ -14,20 +15,109 @@ const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     let player = {
         id: firstPlayer,
         duelId: id,
-        y: 250
+        y: 250,
+        score: 0
     }
     players.push(player)
 
     player = {
         id: secondPlayer,
         duelId: id,
-        y: 250
+        y: 250,
+        score: 0
     }
+
     players.push(player)
+
+    const ball = {
+        id: id,
+        x: 500,
+        y: 250,
+        velocityX: 3,
+        velocityY: 3,
+    }
+    balls.push(ball)
 
     console.log(players)
 
     return { player }
+}
+
+const setScore = (id) => {
+    const index = players.findIndex((player) => player.id === id)
+
+    players[index].score++
+
+    return players[index].score
+}
+
+const setScoreByOponent = (id) => {
+    const duel = players.find((player) => player.id === id).duelId
+
+    const index = players.findIndex((player) => player.id !== id && player.duelId === duel)
+    players[index].score++
+
+    return { player: players[index].id, score: players[index].score }
+}
+
+const moveBall = (id) => {
+    const index = balls.findIndex((ball) => ball.id === id)
+
+    if (index === -1) {
+        return { error: 'Invalid duel!' }
+    }
+
+    balls[index].x += balls[index].velocityX
+    balls[index].y += balls[index].velocityY
+
+    if (balls[index].y < 5 && balls[index].velocityY < 0
+        || balls[index].y > 495 && balls[index].velocityY > 0) {
+        balls[index].velocityY *= -1
+    }
+
+    if (balls[index].x < 65 && balls[index].x > 45) {
+        const player = players.filter((pl) => pl.duelId === id)[0]
+        if (player.y - 50 < balls[index].y - 5 && player.y + 50 > balls[index].y + 5) {
+            balls[index].velocityX *= -1
+        }
+    }
+
+    if (balls[index].x > 935 && balls[index].x < 955) {
+        const player = players.filter((pl) => pl.duelId === id)[1]
+        if (player.y - 50 < balls[index].y - 5 && player.y + 50 > balls[index].y + 5) {
+            balls[index].velocityX *= -1
+        }
+    }
+
+    if (balls[index].x < 5) {
+        const player = players.filter((pl) => pl.duelId === id)[0]
+
+        balls[index].y = player.y
+        balls[index].x = 100
+
+        const result = setScoreByOponent(player.id)
+
+        return {
+            scored: { player: result.player, score: result.score },
+            ball: { x: balls[index].x, y: balls[index].y }
+        }
+    }
+
+    if (balls[index].x > 995) {
+        const player = players.filter((pl) => pl.duelId === id)[1]
+
+        balls[index].y = player.y
+        balls[index].x = 900
+
+        const result = setScoreByOponent(player.id)
+
+        return {
+            scored: { player: result.player, score: result.score },
+            ball: { x: balls[index].x, y: balls[index].y }
+        }
+    }
+
+    return { ball: { x: balls[index].x, y: balls[index].y } }
 }
 
 const removePlayer = (id) => {
@@ -57,10 +147,20 @@ const getUser = (id) => {
     return players[index]
 }
 
-const getDuel = (id) => {
-    const players = players.map((player) => player.duelId === id)
+const getDuels = () => {
+    const duels = Array.from(
+        new Set(
+            players.map((player) => player.duelId)
+        )
+    )
 
-    return players
+    return duels
+}
+
+const getDuel = (id) => {
+    const duel = players.map((player) => player.duelId === id)
+
+    return duel
 }
 
 const movePlayer = (id, keyState, speed) => {
@@ -70,7 +170,7 @@ const movePlayer = (id, keyState, speed) => {
         return { success: false }
     }
 
-    const move = keyState.a ? -1*speed : +1*speed
+    const move = keyState.a ? -1 * speed : +1 * speed
 
     const newY = players[playerIndex].y += move
 
@@ -87,8 +187,10 @@ const movePlayer = (id, keyState, speed) => {
 
 module.exports = {
     addDuel,
+    moveBall,
     removeDuel,
     getUser,
     getDuel,
+    getDuels,
     movePlayer
 }

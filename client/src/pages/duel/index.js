@@ -14,6 +14,10 @@ const Duel = () => {
     const canvasRef = useRef()
     const [firstPlayer, setFirstPlayer] = useState(250)
     const [secondPlayer, setSecondPlayer] = useState(250)
+    const [firstPlayerScore, setFirstplayerScore] = useState(0)
+    const [secondPlayerScore, setSecondPlayerScore] = useState(0)
+
+    const [ball, setBall] = useState({ x: 500, y: 250 })
 
     const keyState = {}
 
@@ -21,6 +25,7 @@ const Duel = () => {
     const userContext = useContext(UserContext)
     const userId = userContext.user.id
     const duelId = params.id
+    const side = params.side
 
     const ENDPOINT = ServerUrl
 
@@ -33,6 +38,25 @@ const Duel = () => {
 
         socket.on('move', ({ y }) => {
             setSecondPlayer(y)
+        })
+
+        socket.on('scored', ({ player, score }) => {
+            if (player === userId) {
+                setFirstplayerScore(score)
+            }
+            else {
+                setSecondPlayerScore(score)
+            }
+        })
+
+        socket.on('moveBall', ({ x, y }) => {
+            console.log({ x, y })
+            if (side == 'up') {
+                setBall({ x: 1000 - x, y })
+            }
+            else {
+                setBall({ x, y })
+            }
         })
     }, [])
 
@@ -56,7 +80,6 @@ const Duel = () => {
                 console.log('Error', error)
             })
         }
-
     }
 
     useEffect(() => {
@@ -66,11 +89,17 @@ const Duel = () => {
         context.fillRect(firstPlayer - 50, 940, 100, 20)
         context.fillRect(secondPlayer - 50, 40, 100, 20)
         context.fillStyle = '#134074';
-    }, [firstPlayer, secondPlayer]);
-    
+        context.fillRect(ball.y - 5, ball.x - 5, 10, 10)
+
+    }, [firstPlayer, secondPlayer, ball]);
+
     return (
         <PageLayout>
             <div onKeyDown={keyDownEvent} onKeyUp={keyUpEvent} tabIndex="0">
+                <div>
+                    <h2>Scores</h2>
+                    <h3>You: {firstPlayerScore} - Enemy: {secondPlayerScore}</h3>
+                </div>
                 <canvas
                     style={{ border: "1px solid black" }}
                     ref={canvasRef}

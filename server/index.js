@@ -8,7 +8,7 @@ const config = require('config')
 
 const PORT = config.get('Port')
 
-const { addDuel, removeDuel, getDuel, getUser, movePlayer } = require('./logic/duels')
+const { addDuel, removeDuel, getDuel, getDuels, moveBall, getUser, movePlayer } = require('./logic/duels')
 const { addInQueue, removeFromQueue, getTwoPlayers } = require('./logic/queue')
 
 const router = require('./router')
@@ -21,12 +21,25 @@ const io = socketio(server)
 app.use(cors())
 app.use(router)
 
-io.on('connect', (socket) => {
-    console.log('Player connected')
+var globalInterval = setInterval(function () {
+    const duels = getDuels()
 
-    setInterval(function () {
-        socket.to('duel').emit('hidden', 'qksam');
-    }, 1000);
+    duels.forEach(duel => {
+        const result = moveBall(duel)
+
+        if (result.scored) {
+            io.to(duel).emit('scored', {
+                player: result.scored.player,
+                score: result.scored.score
+            });
+        }
+
+        io.to(duel).emit('moveBall', { x: result.ball.x, y: result.ball.y });
+    })
+}, 16);
+
+io.on('connection', (socket) => {
+    console.log('Player connected')
 
     socket.on('move', ({ duelId, player, keyState }, callback) => {
         socket.join(duelId)
@@ -87,6 +100,7 @@ io.on('connect', (socket) => {
     })
 
     socket.on('disconnect', () => {
+        // clearInterval(interval)
         console.log('Player disconnected')
     })
 

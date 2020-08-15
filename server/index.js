@@ -17,6 +17,7 @@ const { move } = require('./router')
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
+const winScore = 1
 
 app.use(cors())
 app.use(router)
@@ -31,12 +32,24 @@ var globalInterval = setInterval(function () {
             io.to(duel).emit('scored', {
                 player: result.scored.player,
                 score: result.scored.score
-            });
+            })
+
+            if (result.scored.score === winScore) {
+                const { players } = removeDuel(duel)
+                console.log(players)
+                const winner = players[0].score === winScore ? players[0].id : players[1].id
+                const loser = players[0].score !== winScore ? players[0].id : players[1].id
+
+                io.to(duel).emit('endGame', {
+                    winner,
+                    loser
+                })
+            }
         }
 
-        io.to(duel).emit('moveBall', { x: result.ball.x, y: result.ball.y });
+        io.to(duel).emit('moveBall', { x: result.ball.x, y: result.ball.y })
     })
-}, 16);
+}, 16)
 
 io.on('connection', (socket) => {
     console.log('Player connected')

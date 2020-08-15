@@ -13,7 +13,7 @@ const Home = () => {
             <div className={styles.wrapper}>
                 <div className={styles.center}>
                     <Title title={'OutPlayMe!'} />
-                    <h2>This is simple mupltiplayer game build on React with express servers for backend.</h2>
+                    <h2>This is simple mupltiplayer game build with React with express servers for backend.</h2>
                     <h3>- for 2 players -</h3>
                     <h2>In-Game</h2>
                     <h3>- press/hold 'a' for left</h3>

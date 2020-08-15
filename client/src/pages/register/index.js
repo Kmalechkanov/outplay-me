@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import Input from '../../components/input'
 import Title from '../../components/title'
 import Button from '../../components/button'
@@ -10,107 +11,81 @@ import { render } from '@testing-library/react'
 
 import { UserAPIUrl } from '../../Constants'
 
-class Register extends React.Component {
-    constructor(props) {
-        super(props)
+const Register = () => {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [rePassword, setRePassword] = useState('')
+    const [error, setError] = useState('')
 
-        this.state = {
-            username: "",
-            email: "",
-            password: "",
-            rePassword: "",
-        }
-    }
+    const { user } = useContext(UserContext)
+    const history = useHistory()
 
-    static contextType = UserContext
 
-    onChange = (event, type) => {
-        const newState = {}
-        newState[type] = event.target.value
-
-        this.setState(newState)
-    }
-
-    handleSubmit = async (event) => {
+    const registerEvent = async (event) => {
         event.preventDefault()
-        const {
-            username,
-            email,
-            password
-        } = this.state
 
         await authenticate(UserAPIUrl + 'signup', {
             username,
             email,
             password
         }, (user) => {
-            this.context.logIn(user)
-            this.props.history.push('/login')
+            // this.context.logIn(user)
+            history.push('/login')
         }, (e) => {
             if (e.message.message != undefined) {
-                this.state.error = e.message.message
+                setError(e.message.message)
             }
             else {
-                this.state.error = e.message
+                setError(e.message)
             }
-
-            this.forceUpdate()
         })
     }
 
-    render() {
-        const {
-            username,
-            email,
-            password,
-            rePassword,
-            error
-        } = this.state
 
-        return (
-            <PageLayout>
-                <BoxForm body={
-                    <form onSubmit={this.handleSubmit}>
-                        <Title title="Register" />
-                        <p>{
-                            this.state.error
-                        }</p>
-                        <Input
-                            value={username}
-                            onChange={(e) => this.onChange(e, 'username')}
-                            label="Username"
-                            id="username"
-                            required
-                        />
-                        <Input
-                            value={email}
-                            onChange={(e) => this.onChange(e, 'email')}
-                            label="Email"
-                            id="email"
-                            required
-                        />
-                        <Input
-                            type="password"
-                            value={password}
-                            onChange={(e) => this.onChange(e, 'password')}
-                            label="Password"
-                            id="password"
-                            required
-                        />
-                        <Input
-                            type="password"
-                            value={rePassword}
-                            onChange={(e) => this.onChange(e, 'rePassword')}
-                            label="Re-Password"
-                            id="re-password"
-                            required
-                        />
-                        <Button text="Register"></Button>
-                    </form>
-                } />
-            </PageLayout >
-        )
-    }
+    return (
+        <PageLayout>
+            <BoxForm body={
+                <form>
+                    <Title title="Register" />
+                    <p>{
+                        error
+                    }</p>
+                    <Input
+                        value={username}
+                        label="Username"
+                        id="username"
+                        onChange={e => setUsername(e.target.value)}
+                        required
+                    />
+                    <Input
+                        value={email}
+                        label="Email"
+                        id="email"
+                        onChange={e => setEmail(e.target.value)}
+                        required
+                    />
+                    <Input
+                        type="password"
+                        value={password}
+                        label="Password"
+                        id="password"
+                        onChange={e => setPassword(e.target.value)}
+                        required
+                    />
+                    <Input
+                        type="password"
+                        value={rePassword}
+                        label="Re-Password"
+                        id="re-password"
+                        onChange={e => setRePassword(e.target.value)}
+                        required
+                    />
+                    <Button text="Register" onClick={registerEvent}></Button>
+                </form>
+            } />
+        </PageLayout >
+    )
 }
 
 export default Register

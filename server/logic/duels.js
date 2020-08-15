@@ -1,6 +1,13 @@
 const players = []
 const balls = []
 
+const func = () => (setInterval(function () {
+   console.log('Players', players)
+   console.log('Balls', balls)
+}, 1000))
+
+func();
+
 const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     if (!firstPlayer || !secondPlayer || !id) {
         return { error: 'Players and duel are required.' }
@@ -140,17 +147,27 @@ const removePlayer = (id) => {
     const index = players.findIndex((player) => player.id === id)
 
     if (index !== -1) {
-        return duels.splice(index, 1)[0]
+        players.splice(index, 1)[0]
+    }
+}
+
+const removeBall = (id) => {
+    const index = balls.findIndex((ball) => ball.id === id)
+    if (index !== -1) {
+        balls.splice(index, 1)[0]
     }
 }
 
 const removeDuel = (id) => {
-    const players = players.map((player) => player.duelId === id)
+    const twoPlayers = players.filter((player) => player.duelId === id)
 
-    if (player.lenght === 2) {
-        removePlayer(players[0].id)
-        removePlayer(players[1].id)
+    if (twoPlayers.length === 2) {
+        removePlayer(twoPlayers[0].id)
+        removePlayer(twoPlayers[1].id)
+        removeBall(id)
     }
+    
+    return { players: twoPlayers }
 }
 
 const getUser = (id) => {

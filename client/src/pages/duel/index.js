@@ -16,6 +16,7 @@ const Duel = () => {
     const [secondPlayer, setSecondPlayer] = useState(250)
     const [firstPlayerScore, setFirstPlayerScore] = useState(0)
     const [secondPlayerScore, setSecondPlayerScore] = useState(0)
+    const [winner, setWinner] = useState(null)
 
     const [ball, setBall] = useState({ x: 500, y: 250 })
 
@@ -28,10 +29,11 @@ const Duel = () => {
     const side = params.side
 
     const ENDPOINT = ServerUrl
-    
+
     useEffect(() => {
         socket = io(ENDPOINT)
         console.log('Opening it')
+
         socket.on('getInTouch', (response) => {
             if (side == 'up') {
                 setBall({ x: 1000 - response.ball.x, y: response.ball.y })
@@ -88,6 +90,17 @@ const Duel = () => {
                 setBall({ x, y })
             }
         })
+
+        socket.on('endGame', ({ winner, loser }) => {
+            if (winner === userId) {
+                setWinner(true)
+            }
+            else {
+                setWinner(false)
+            }
+            
+            socket.disconnect()
+        })
     }, [])
 
     useEffect(() => () => {
@@ -131,17 +144,29 @@ const Duel = () => {
     return (
         <PageLayout>
             <div className={styles.wrapper} onKeyDown={keyDownEvent} onKeyUp={keyUpEvent} tabIndex="0">
-                <div>
-                    <h2 className={styles.fixedText}>Scores</h2>
-                    <h3>You: {firstPlayerScore} - Enemy: {secondPlayerScore}</h3>
-                </div>
-                <canvas
-                    style={{ border: "1px solid black" }}
-                    ref={canvasRef}
-                    width={`${500}px`}
-                    height={`${1000}px`}
-                />
+                {winner === null
+                    ? (<>
+                        <div>
+                            <h2 className={styles.fixedText}>Scores</h2>
+                            <h3>You: {firstPlayerScore} - Enemy: {secondPlayerScore}</h3>
+                        </div>
+                        <canvas
+                            style={{ border: "1px solid black" }}
+                            ref={canvasRef}
+                            width={`${500}px`}
+                            height={`${1000}px`}
+                        />
+                    </>)
+                    : (<>
+                        {winner === true
+                            ? <h2>You won the game</h2>
+                            : <h2>You lose the game</h2>
+                        }
+                    </>)
+                }
             </div>
+
+
         </PageLayout>
     )
 }

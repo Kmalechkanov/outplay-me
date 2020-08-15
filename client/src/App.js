@@ -33,7 +33,6 @@ const App = (props) => {
       return
     }
 
-    // TODO change this
     fetch(Constants.UserAPIUrl + 'verify', {
       method: 'GET',
       headers: {
@@ -42,7 +41,7 @@ const App = (props) => {
       }
     }).then(async res => {
       let response = await res.json()
-      
+
       if (res.status == 200) {
         logIn({
           username: response.username,

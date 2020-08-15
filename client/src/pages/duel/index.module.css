@@ -1,0 +1,20 @@
+.wrapper {
+    text-align: center;
+}
+
+.wrapper {
+    border: 22px solid #134074;
+    border-bottom: none;
+    border-top: none;
+}
+
+.wrapper:focus {
+    border: 22px solid #8DA9C4;
+    border-bottom: none;
+    border-top: none;
+}
+
+.fixedText {
+    margin-top: 0;
+    padding-top: 20px;
+}

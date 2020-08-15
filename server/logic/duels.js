@@ -16,7 +16,8 @@ const addDuel = ({ id, firstPlayer, secondPlayer }) => {
         id: firstPlayer,
         duelId: id,
         y: 250,
-        score: 0
+        score: 0,
+        side: 'up'
     }
     players.push(player)
 
@@ -24,7 +25,8 @@ const addDuel = ({ id, firstPlayer, secondPlayer }) => {
         id: secondPlayer,
         duelId: id,
         y: 250,
-        score: 0
+        score: 0,
+        side: 'down'
     }
 
     players.push(player)
@@ -43,6 +45,10 @@ const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     return { player }
 }
 
+const duelExists = (id) => {
+    return players.findIndex((player) => player.duelId == id) !== -1
+}
+
 const setScore = (id) => {
     const index = players.findIndex((player) => player.id === id)
 
@@ -58,6 +64,16 @@ const setScoreByOponent = (id) => {
     players[index].score++
 
     return { player: players[index].id, score: players[index].score }
+}
+
+const getBall = (id) => {
+    const index = balls.findIndex((ball) => ball.id === id)
+
+    if (index === -1) {
+        return { x: 500, y: 250 }
+    }
+
+    return { x: balls[index].x, y: balls[index].y }
 }
 
 const moveBall = (id) => {
@@ -158,8 +174,7 @@ const getDuels = () => {
 }
 
 const getDuel = (id) => {
-    const duel = players.map((player) => player.duelId === id)
-
+    const duel = players.filter((player) => player.duelId === id)
     return duel
 }
 
@@ -187,10 +202,12 @@ const movePlayer = (id, keyState, speed) => {
 
 module.exports = {
     addDuel,
+    duelExists,
     moveBall,
     removeDuel,
     getUser,
     getDuel,
+    getBall,
     getDuels,
     movePlayer
 }

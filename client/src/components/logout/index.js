@@ -1,46 +1,18 @@
-import React, { useState, Component } from 'react'
-import { Link, useHistory, Redirect } from "react-router-dom";
-import { ExpiredCookie } from '../../Constants'
-import Href from '../href'
+import React from 'react'
+import { useHistory } from "react-router-dom"
+import styles from './index.module.css'
 
-const Logout = (link) => {
-  const history = useHistory()
+const Logout = ({link, event}) => {
+    const history = useHistory()
 
-  const logout = (e) => {
-    document.cookie = ExpiredCookie
-    history.push("/login")
-  }
+    const logMeOut = () => {
+        event()
+        history.push(link)
+    }
 
-  return (
-    <Href link={link} push={true} title='LogOut' event={logout} />
-  )
+    return (
+        <button className={styles.button} onClick={logMeOut}>LogOut</button>
+    )
 }
-
-// class Logout extends Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       link: props.link
-//     }
-//   }
-
-//   render() {
-//     const { link } = this.state
-//     const history = useHistory()
-
-//     const logout = (e) => {
-//       document.cookie = ExpiredCookie
-//       history.push("/login")
-//     }
-
-//     // if (link) {
-//     //   return <Redirect to={link} push={true} />
-//     // }
-
-//     return (
-//       <Href link={link} push={true} title='LogOut' event={logout} />
-//     )
-//   }
-// }
 
 export default Logout

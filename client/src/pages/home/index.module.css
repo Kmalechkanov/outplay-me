@@ -1,0 +1,17 @@
+.center {
+    text-align: center;
+}
+
+.wrapper {
+    align-items: center;
+    width: 800px;
+    margin: 0 auto;
+}
+
+.wrapper h2, .wrapper h3 {
+    color: #13315C;
+}
+
+.bigger h1 {
+    font-size: 100px
+}

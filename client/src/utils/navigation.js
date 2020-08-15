@@ -7,12 +7,7 @@ const navigation = (user) => {
         {
             title: "Profile",
             link: "/profile"
-        },
-        {
-            title: "LogOut",
-            link: "/logout",
-            custom: true
-        },
+        }
     ]
 
     const notAuthorized = [
@@ -32,6 +27,5 @@ const navigation = (user) => {
 
     return user && user.loggedIn ? authorized : notAuthorized
 }
-
 
 export default navigation

@@ -8,7 +8,7 @@ const config = require('config')
 
 const PORT = config.get('Port')
 
-const { addDuel, removeDuel, getDuel, getDuels, moveBall, getUser, movePlayer } = require('./logic/duels')
+const { addDuel, duelExists, removeDuel, getDuel, getBall, getDuels, moveBall, getUser, movePlayer } = require('./logic/duels')
 const { addInQueue, removeFromQueue, getTwoPlayers } = require('./logic/queue')
 
 const router = require('./router')
@@ -41,6 +41,16 @@ var globalInterval = setInterval(function () {
 io.on('connection', (socket) => {
     console.log('Player connected')
 
+    socket.on('getInTouch', ({ duel }, callback) => {
+        socket.join(duel)
+        const duelResponse = getDuel(duel)
+        const ballReponse = getBall(duel)
+
+        if (duelExists(duel)) {
+            socket.emit('getInTouch', { duel: duelResponse, ball: ballReponse })
+        }
+    })
+
     socket.on('move', ({ duelId, player, keyState }, callback) => {
         socket.join(duelId)
         const response = movePlayer(player, keyState, 10)
@@ -61,7 +71,7 @@ io.on('connection', (socket) => {
         const user = getUser(player)
 
         if (user !== null) {
-            socket.emit('joinDuelMe', { duelId: user.duelId })
+            socket.emit('joinDuelMe', { duelId: user.duelId, side: user.side })
             return
         }
 

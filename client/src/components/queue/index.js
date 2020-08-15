@@ -5,6 +5,7 @@ import io from 'socket.io-client'
 import { ServerUrl } from '../../Constants'
 import UserContext from '../../Context'
 import Button from '../../components/button'
+import styles from './index.module.css'
 
 let socket
 
@@ -34,11 +35,11 @@ const Queue = () => {
             }
         })
 
-        socket.on('joinDuelMe', ({ duelId }) => {
+        socket.on('joinDuelMe', ({ duelId, side }) => {
             console.log('Duel:', duelId)
 
             socket.disconnect()
-            history.push(`/duel/${duelId}/up`)
+            history.push(`/duel/${duelId}/${side || 'up'}`)
         })
 
         socket.on('joinDuel', ({ duelId, player }) => {
@@ -85,11 +86,18 @@ const Queue = () => {
 
     const leaveQueueEvent = (event) => {
         event.preventDefault()
+
+        leaveQueue()
     }
 
     return (
-        <div>
-            <div>{timer}</div>
+        <div className={styles.wrapper}>
+            <div className={styles.timer}>
+                {timer === 0
+                    ? 'Search for a game'
+                    : `${timer} seconds`
+                }
+            </div>
             {trigger
                 ? <Button text='Stop Queue' onClick={leaveQueueEvent} />
                 : <Button text='Join Queue' onClick={joinQueueEvent} />

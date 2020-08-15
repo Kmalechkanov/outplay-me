@@ -1,19 +1,20 @@
 import React from 'react'
-import styles from './index.module.css'
 import Header from '../header'
+import Footer from '../footer'
+import styles from './index.module.css'
 
 const PageLayout = (props) => {
     return (
-        <div>
-            <Header>Test</Header>
+        <div className={styles.wrapper}>
+            <Header/>
 
             <div>
                 {props.children}
             </div>
 
-            <footer>
-                Footer
-            </footer>
+            <Footer>
+                Developer: Kaloyan Malechkanov
+            </Footer>
         </div>
     )
 }

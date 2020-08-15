@@ -14,7 +14,7 @@ const Duel = () => {
     const canvasRef = useRef()
     const [firstPlayer, setFirstPlayer] = useState(250)
     const [secondPlayer, setSecondPlayer] = useState(250)
-    const [firstPlayerScore, setFirstplayerScore] = useState(0)
+    const [firstPlayerScore, setFirstPlayerScore] = useState(0)
     const [secondPlayerScore, setSecondPlayerScore] = useState(0)
 
     const [ball, setBall] = useState({ x: 500, y: 250 })
@@ -28,9 +28,40 @@ const Duel = () => {
     const side = params.side
 
     const ENDPOINT = ServerUrl
-
+    
     useEffect(() => {
         socket = io(ENDPOINT)
+        console.log('Opening it')
+        socket.on('getInTouch', (response) => {
+            if (side == 'up') {
+                setBall({ x: 1000 - response.ball.x, y: response.ball.y })
+            }
+            else {
+                setBall({ x: response.ball.x, y: response.ball.y })
+            }
+
+            const duel = response.duel
+
+            if (duel[0].id == userId) {
+                setFirstPlayer(duel[0].y)
+                setFirstPlayerScore(duel[0].score)
+                setSecondPlayer(duel[1].y)
+                setSecondPlayerScore(duel[1].score)
+            } else {
+                setFirstPlayer(duel[1].y)
+                setFirstPlayerScore(duel[1].score)
+                setSecondPlayer(duel[0].y)
+                setSecondPlayerScore(duel[0].score)
+            }
+        })
+
+        const fetchDuel = () => {
+            socket.emit('getInTouch', { duel: duelId }, (error) => {
+                console.log('Error', error)
+            })
+        }
+
+        fetchDuel()
 
         socket.on('moveMe', ({ y }) => {
             setFirstPlayer(y)
@@ -42,7 +73,7 @@ const Duel = () => {
 
         socket.on('scored', ({ player, score }) => {
             if (player === userId) {
-                setFirstplayerScore(score)
+                setFirstPlayerScore(score)
             }
             else {
                 setSecondPlayerScore(score)
@@ -50,7 +81,6 @@ const Duel = () => {
         })
 
         socket.on('moveBall', ({ x, y }) => {
-            console.log({ x, y })
             if (side == 'up') {
                 setBall({ x: 1000 - x, y })
             }
@@ -58,6 +88,11 @@ const Duel = () => {
                 setBall({ x, y })
             }
         })
+    }, [])
+
+    useEffect(() => () => {
+        console.log('Closing it')
+        socket.disconnect()
     }, [])
 
     useInterval(() => gameLoop(), 16)
@@ -95,9 +130,9 @@ const Duel = () => {
 
     return (
         <PageLayout>
-            <div onKeyDown={keyDownEvent} onKeyUp={keyUpEvent} tabIndex="0">
+            <div className={styles.wrapper} onKeyDown={keyDownEvent} onKeyUp={keyUpEvent} tabIndex="0">
                 <div>
-                    <h2>Scores</h2>
+                    <h2 className={styles.fixedText}>Scores</h2>
                     <h3>You: {firstPlayerScore} - Enemy: {secondPlayerScore}</h3>
                 </div>
                 <canvas

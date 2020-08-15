@@ -1,0 +1,15 @@
+.timer {
+    font-size: 80px;
+    color: #8DA9C4
+}
+
+.wrapper {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.wrapper button {
+    font-size: 30px;
+    margin: 0 auto;
+    width: auto;
+}

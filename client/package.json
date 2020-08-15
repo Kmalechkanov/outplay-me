@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "mongoose": "^5.10.0",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -17,7 +18,7 @@
   "scripts": {
     "all": "start npm run server && start npm run db && start npm run client ",
     "db": "cd ../../rest-auth && node server",
-	"server": "cd ../server && node index",
+    "server": "cd ../server && node index",
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

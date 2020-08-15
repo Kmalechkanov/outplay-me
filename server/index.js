@@ -1,5 +1,6 @@
 const http = require('http')
 const express = require('express')
+const bodyParser = require('body-parser')
 const socketio = require('socket.io')
 const cors = require('cors')
 
@@ -12,7 +13,6 @@ const { addDuel, duelExists, removeDuel, getDuel, getBall, getDuels, moveBall, g
 const { addInQueue, removeFromQueue, getTwoPlayers } = require('./logic/queue')
 
 const router = require('./router')
-const { move } = require('./router')
 
 const app = express()
 const server = http.createServer(app)
@@ -20,7 +20,22 @@ const io = socketio(server)
 const winScore = 1
 
 app.use(cors())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(router)
+
+const db = require('./models')
+const connectionStirng = config.get('Mongoose.connectionString')
+
+db.mongoose.connect(connectionStirng, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log("Successfully connect to MongoDB.")
+}).catch(err => {
+    console.error("Connection error", err)
+    process.exit()
+})
 
 var globalInterval = setInterval(function () {
     const duels = getDuels()

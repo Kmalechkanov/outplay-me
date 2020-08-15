@@ -1,13 +1,6 @@
 const players = []
 const balls = []
 
-const func = () => (setInterval(function () {
-   console.log('Players', players)
-   console.log('Balls', balls)
-}, 1000))
-
-func();
-
 const addDuel = ({ id, firstPlayer, secondPlayer }) => {
     if (!firstPlayer || !secondPlayer || !id) {
         return { error: 'Players and duel are required.' }

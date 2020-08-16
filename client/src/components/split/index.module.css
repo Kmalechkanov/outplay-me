@@ -1,0 +1,13 @@
+.alignLeft {
+	float: left;
+}
+
+.alignRight {
+	float: right;
+}
+
+.inline {
+	display: inline-block;
+	width: 100%;
+	border-bottom: 4px dotted black;
+}

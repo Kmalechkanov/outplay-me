@@ -98,7 +98,7 @@ const Duel = () => {
             else {
                 setWinner(false)
             }
-            
+
             socket.disconnect()
         })
     }, [])
@@ -165,8 +165,6 @@ const Duel = () => {
                     </>)
                 }
             </div>
-
-
         </PageLayout>
     )
 }

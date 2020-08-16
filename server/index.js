@@ -25,6 +25,7 @@ app.use(bodyParser.json())
 app.use(router)
 
 const db = require('./models')
+const Duel = db.duel
 const connectionStirng = config.get('Mongoose.connectionString')
 
 db.mongoose.connect(connectionStirng, {
@@ -51,14 +52,18 @@ var globalInterval = setInterval(function () {
 
             if (result.scored.score === winScore) {
                 const { players } = removeDuel(duel)
-                console.log(players)
+
                 const winner = players[0].score === winScore ? players[0].id : players[1].id
                 const loser = players[0].score !== winScore ? players[0].id : players[1].id
+                const loserScore = players[0].score === winScore ? players[1].score : players[0].score
 
                 io.to(duel).emit('endGame', {
                     winner,
                     loser
                 })
+
+                const duelModel = new Duel({ winner, loser, winnerScore: winScore, loserScore })
+                duelModel.save()
             }
         }
 

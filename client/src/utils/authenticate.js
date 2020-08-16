@@ -22,7 +22,7 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
             || response.message === 'User was registered successfully!') {
 
             if (response.message === 'User was registered successfully!') {
-                await fetch(ServerUrl+'register', {
+                await fetch(ServerUrl + 'register', {
                     method: 'POST',
                     body: JSON.stringify({
                         id: response.id,

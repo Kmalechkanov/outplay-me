@@ -6,9 +6,9 @@ const addInQueue = (player) => {
     if (isPlayerAlreadyIn) {
         return { error: `${player} already in queue.` }
     }
-    
+
     players.push(player)
-    
+
     return { message: 'Succesfully joined in queue.' }
 }
 

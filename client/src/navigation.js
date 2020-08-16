@@ -12,7 +12,7 @@ import ErrorPage from './pages/error'
 import RegisterPage from './pages/register'
 import LoginPage from './pages/login'
 import DuelPage from './pages/duel'
-import Register from './pages/register'
+import ProfilePage from './pages/profile'
 
 const Navigation = () => {
   const { user } = useContext(UserContext)
@@ -37,7 +37,11 @@ const Navigation = () => {
             ? (<DuelPage />)
             : (<Redirect to='/login' />)}
         </Route>
-        {/* <Route path="/profile/:userid" component={ProfilePage} /> */}
+        <Route path="/profile">
+          {loggedIn
+            ? (<ProfilePage />)
+            : (<Redirect to='/login' />)}
+        </Route>
         <Route component={ErrorPage} />
       </Switch>
     </BrowserRouter>

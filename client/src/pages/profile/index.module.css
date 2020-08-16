@@ -1,0 +1,18 @@
+.mainWrapper {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+
+.leftAlign {
+    text-align: left;
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.wrapper {
+    width: 800px;
+    margin: auto;
+}

@@ -159,7 +159,7 @@ const removeDuel = (id) => {
         removePlayer(twoPlayers[1].id)
         removeBall(id)
     }
-    
+
     return { players: twoPlayers }
 }
 

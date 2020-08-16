@@ -6,7 +6,7 @@ import styles from './index.module.css'
 const PageLayout = (props) => {
     return (
         <div className={styles.wrapper}>
-            <Header/>
+            <Header />
 
             <div>
                 {props.children}
